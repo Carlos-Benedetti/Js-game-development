@@ -1,0 +1,1 @@
+export enum MISSING_TEXTURE { source = "assets/missingTexture.jpeg" }
