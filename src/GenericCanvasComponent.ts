@@ -2,7 +2,7 @@ import { IGenericCanvasComponent, IGenericKeybordControls } from "./interfaces";
 import { MISSING_TEXTURE } from "./globals";
 import { Subject, AsyncSubject, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import {v4} from 'uuid'
+import { v4 } from 'uuid'
 
 export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
     _control: IGenericKeybordControls<any>;
@@ -17,16 +17,16 @@ export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
 
         this._control = v;
 
-        this.subscribeToEvents(this._control.PlusUp, () => { this.movingUp = true })
+        this.subscribeToEvents(this._control.plusUp, () => { this.movingUp = true })
         this.subscribeToEvents(this._control.minusUp, () => { this.movingUp = false })
 
-        this.subscribeToEvents(this._control.PlusDown, () => { this.movingDown = true })
+        this.subscribeToEvents(this._control.plusDown, () => { this.movingDown = true })
         this.subscribeToEvents(this._control.minusDown, () => { this.movingDown = false })
 
-        this.subscribeToEvents(this._control.PlusLeft, () => { this.movingLeft = true })
+        this.subscribeToEvents(this._control.plusLeft, () => { this.movingLeft = true })
         this.subscribeToEvents(this._control.minusLeft, () => { this.movingLeft = false })
 
-        this.subscribeToEvents(this._control.PlusRight, () => { this.movingRight = true })
+        this.subscribeToEvents(this._control.plusRight, () => { this.movingRight = true })
         this.subscribeToEvents(this._control.minusRight, () => { this.movingRight = false })
     }
 
@@ -41,21 +41,21 @@ export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
         this._spritePath = v;
     }
 
-    movingUp: boolean = false;
-    movingDown: boolean = false;
-    movingLeft: boolean = false;
-    movingRight: boolean = false;
+    movingUp: boolean
+    movingDown:boolean
+    movingLeft: boolean
+    movingRight: boolean
 
     upSpeed = 1;
     downSpeed = 1
     leftSpeed = 1
     rightSpeed = 1
 
-    baseSpeed = 10
+    baseSpeed = 1
     sprite: HTMLImageElement = null
     constructor(
         public name: string = "Novo Component",
-        public id: string= v4(),
+        public id: string = v4(),
         public width = 10,
         public height = 10,
         public x = 0,
@@ -67,27 +67,28 @@ export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
     async addControl<E extends IGenericKeybordControls<I>, I>(control: E): Promise<void> {
         this.control = control
     }
-    async create(width: number = this.width, height: number = this.height): Promise<void> {
+    async load(width: number = this.width, height: number = this.height): Promise<void> {
         this.width = width
         this.height = height
         await this.getSprite()
         return
     }
     async aplyDirections(actions?: GenericCanvasComponent<T>['testWillColidWithRollBack']) {
+        
         if (this.movingUp) {
-            this.x += this.upSpeed * this.baseSpeed
-            if (actions) actions('x', '+', 'this.upSpeed*this.baseSpeed')
+            this.y -= this.upSpeed * this.baseSpeed
+            if (actions) actions('y', '-', 'this.upSpeed*this.baseSpeed')
         }
         if (this.movingDown) {
-            this.x -= this.downSpeed * this.baseSpeed
-            if (actions) actions('x', '-', 'this.downSpeed*this.baseSpeed')
+            this.y += this.downSpeed * this.baseSpeed
+            if (actions) actions('y', '+', 'this.downSpeed*this.baseSpeed')
         }
         if (this.movingRight) {
-            this.y += this.rightSpeed * this.baseSpeed
-            if (actions) actions('y', '+', 'this.rightSpeed*this.baseSpeed')
+            this.x += this.rightSpeed * this.baseSpeed
+            if (actions) actions('x', '+', 'this.rightSpeed*this.baseSpeed')
         }
         if (this.movingLeft) {
-            this.y -= this.leftSpeed * this.baseSpeed
+            this.x -= this.leftSpeed * this.baseSpeed
             if (actions) await actions('x', '-', 'this.leftSpeed*this.baseSpeed')
         }
         return

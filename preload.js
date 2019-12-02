@@ -12,13 +12,16 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   main()
 })
-var GameArea = require("./lib/GameArea").GameArea;
+var GameArea = require("./lib/game").gameMain;
 var square = new (require("./lib/square").square);
 
 function main(){
     const canvas = new GameArea()
-    canvas.start()
-    square.create()
-    canvas.addComponent(square)
+    canvas._loadingSteps.asObservable().subscribe(i=>{
+      
+    })
+    canvas.start().then(()=>{
+      document.querySelector('#loading').innerHTML = ""
+    })
 }
 

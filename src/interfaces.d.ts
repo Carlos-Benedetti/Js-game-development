@@ -1,5 +1,8 @@
 import { Observable } from 'rxjs'
-
+export interface loading {
+    number: number
+    of: number
+}
 export interface IResolution {
     width: number
     height: number
@@ -18,22 +21,23 @@ export interface IKeyMap {
     right: number
 }
 export interface IGenericKeybordControls<T> {
-    PlusUp: Observable<boolean>
-    PlusDown: Observable<boolean>
-    PlusLeft: Observable<boolean>
-    PlusRight: Observable<boolean>
+    plusUp: Observable<boolean>
+    plusDown: Observable<boolean>
+    plusLeft: Observable<boolean>
+    plusRight: Observable<boolean>
     minusUp: Observable<boolean>
     minusDown: Observable<boolean>
     minusLeft: Observable<boolean>
     minusRight: Observable<boolean>
 
     keyMap: IKeyMap
+    load():Promise<void>
     startListeningToKeybord(): Promise<void>
     stopListeningToKeybord(): Promise<void>
 }
 export interface IGenericCanvasComponent<T> extends canvasObject {
     context: CanvasRenderingContext2D
-    control: IGenericKeybordControls<any>|null
+    control: IGenericKeybordControls<any> | null
     movingUp: boolean
     movingDown: boolean
     movingLeft: boolean
@@ -52,7 +56,7 @@ export interface IGenericCanvasComponent<T> extends canvasObject {
     addControl<E extends IGenericKeybordControls<I>, I>(control: E): Promise<void>
     aplyMoviment(): Promise<void>
     getSprite(path: string): Promise<HTMLImageElement>
-    create(width: number, height: number): Promise<void>
+    load(width: number, height: number): Promise<void>
     willCollid(): Promise<boolean>
 }
 
@@ -64,6 +68,7 @@ export interface IGenericCanvas<T> {
     aplyGravity: boolean
     gravity: number
     resolution: IResolution;
+    load():Promise<void>
     updateTickSpeed(newTick: number): Promise<void>
     AdaptResolution(resolution: IResolution): Promise<void>
     start(): Promise<void>

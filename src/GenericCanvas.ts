@@ -8,9 +8,9 @@ export class GenericCanvas<T> implements IGenericCanvas<T>{
     constructor(
         public canvas = document.createElement('canvas'),
         public intervarIndex: NodeJS.Timer = null,
-        public tickSpeed: number = 100,
+        public tickSpeed: number = 10,
         public aplyGravity: boolean = false,
-        public resolution: IResolution = { width: 1024, height: 780 },
+        public resolution: IResolution = { width: 400, height: 400 },
         public gravity: number = 9.8,
         public context = canvas.getContext('2d')
     ) { }
@@ -32,20 +32,23 @@ export class GenericCanvas<T> implements IGenericCanvas<T>{
         this.canvas.width = this.resolution.width
         this.canvas.height = this.resolution.height
     }
-    async start(): Promise<void> {
-        this.AdaptResolution(this.resolution)
-        this.intervarIndex = setInterval(()=>{this.update()}, this.tickSpeed)
+    async load(){
+        await this.AdaptResolution(this.resolution)
         document.body.appendChild(this.canvas)
         return
     }
+    async start(): Promise<void> {
+        this.intervarIndex = setInterval(()=>{this.update()}, this.tickSpeed)
+        return 
+    }
     async draw(): Promise<void> {
         for await (let component of this.components) {
-            console.log("Draw: "+component.name)
             await component.draw()
         }
         return
     }
     async update(): Promise<void> {
+        this.context.clearRect(0,0,this.canvas.width,this.canvas.height)
         await this.draw()
         return
     }
