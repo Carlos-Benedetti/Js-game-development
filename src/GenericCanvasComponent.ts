@@ -3,6 +3,7 @@ import { MISSING_TEXTURE } from "./globals";
 import { Subject, AsyncSubject, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { v4 } from 'uuid'
+import { staticVariables } from './args'
 
 export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
     _control: IGenericKeybordControls<any>;
@@ -30,7 +31,7 @@ export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
         this.subscribeToEvents(this._control.minusRight, () => { this.movingRight = false })
     }
 
-    context: CanvasRenderingContext2D = null;
+    context: CanvasRenderingContext2D = null
     _spritePath: string = null
 
     public get spritePath(): string {
@@ -42,7 +43,7 @@ export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
     }
 
     movingUp: boolean
-    movingDown:boolean
+    movingDown: boolean
     movingLeft: boolean
     movingRight: boolean
 
@@ -68,28 +69,47 @@ export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
         this.control = control
     }
     async load(width: number = this.width, height: number = this.height): Promise<void> {
+        this.context = staticVariables.gameArea.context;
+        staticVariables.gameArea.addComponent(this)
         this.width = width
         this.height = height
         await this.getSprite()
         return
     }
     async aplyDirections(actions?: GenericCanvasComponent<T>['testWillColidWithRollBack']) {
-        
+
         if (this.movingUp) {
             this.y -= this.upSpeed * this.baseSpeed
-            if (actions) actions('y', '-', 'this.upSpeed*this.baseSpeed')
+            if (actions) {
+                if(await this.willCollid()){
+                    this.y += this.downSpeed * this.baseSpeed
+                }
+            }
         }
         if (this.movingDown) {
             this.y += this.downSpeed * this.baseSpeed
-            if (actions) actions('y', '+', 'this.downSpeed*this.baseSpeed')
+            if (actions) {
+                if(await this.willCollid()){
+                    console.log("reverting")
+                    this.y -= this.downSpeed * this.baseSpeed
+                }
+            }
         }
         if (this.movingRight) {
             this.x += this.rightSpeed * this.baseSpeed
-            if (actions) actions('x', '+', 'this.rightSpeed*this.baseSpeed')
+            if (actions) {
+                if(await this.willCollid()){
+                    this.x -= this.rightSpeed * this.baseSpeed
+                }
+            }
         }
         if (this.movingLeft) {
             this.x -= this.leftSpeed * this.baseSpeed
-            if (actions) await actions('x', '-', 'this.leftSpeed*this.baseSpeed')
+            if (actions) {
+                if(await this.willCollid()){
+                    this.x += this.rightSpeed * this.baseSpeed
+                }
+            }
         }
         return
 
@@ -110,18 +130,31 @@ export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
         this.aplyDirections()
 
         if (await this.willCollid()) {
+            console.log(await this.willCollid())
             this.x = backX;
             this.y = backY
 
-            await this.aplyDirections(this.testWillColidWithRollBack)
+            await this.aplyDirections(this.testWillColidWithRollBack.bind(this))
             return
         } else {
             return
         }
     }
-    async willCollid(): Promise<boolean> {
-        return false
-        //TODO: throw new Error("Method not implemented.");
+    willCollid(): Promise<boolean> {
+        return new Promise(resolve => {
+            const x = this.x
+            const y = this.y
+            const width = this.width
+            const height = this.height
+            staticVariables.gameArea.components.forEach((object2, i, k) => {
+                if ((object2.id !== this.id) && this.x < object2.x + object2.width && this.x + this.width > object2.x &&
+                    this.y < object2.y + object2.height && this.y + this.height > object2.y) {
+                    resolve(true)
+                } else if ((i + 1) === k.length) {
+                    resolve(false)
+                }
+            })
+        })
     }
     getSprite(path?: string): Promise<HTMLImageElement> {
         return new Promise((resolve, reject) => {

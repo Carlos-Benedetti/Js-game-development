@@ -1,4 +1,5 @@
 import { IResolution, IGenericCanvas, IGenericCanvasComponent } from "./interfaces";
+import { staticVariables } from "./args";
 
 
 
@@ -53,8 +54,7 @@ export class GenericCanvas<T> implements IGenericCanvas<T>{
         return
     }
     async addComponent(component: IGenericCanvasComponent<any>): Promise<void> {
-        component.context = this.context
-        this.components = [component]
+        this.components.push(component)
         return
     }
 

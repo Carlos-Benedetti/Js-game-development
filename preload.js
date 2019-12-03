@@ -17,11 +17,7 @@ var square = new (require("./lib/square").square);
 
 function main(){
     const canvas = new GameArea()
-    canvas._loadingSteps.asObservable().subscribe(i=>{
-      
-    })
-    canvas.start().then(()=>{
-      document.querySelector('#loading').innerHTML = ""
-    })
+    
+    canvas.start()
 }
 
