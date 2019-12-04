@@ -51,13 +51,18 @@ export interface IGenericCanvasComponent<T> extends canvasObject {
     baseSpeed: number
     name: string
     id: string
+    type:number
     spritePath: string
     sprite: HTMLImageElement
+    kill():Promise<void>
     addControl<E extends IGenericKeybordControls<I>, I>(control: E): Promise<void>
     aplyMoviment(): Promise<void>
     getSprite(path: string): Promise<HTMLImageElement>
     load(width: number, height: number): Promise<void>
-    willCollid(): Promise<boolean>
+    preDraw():Promise<void>
+    draw(): Promise<void>
+    postDraw():Promise<void>
+    willCollid<E extends IGenericCanvasComponent<I>, I>(): Promise<IGenericCanvasComponent<E>|false>
 }
 
 export interface IGenericCanvas<T> {

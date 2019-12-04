@@ -6,6 +6,12 @@ import { v4 } from 'uuid'
 import { staticVariables } from './args'
 
 export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
+    async preDraw(): Promise<void> {
+        return 
+    }
+    async postDraw(): Promise<void> {
+        return
+    }
     _control: IGenericKeybordControls<any>;
 
     events: Subject<any> = new AsyncSubject<any>()
@@ -51,7 +57,7 @@ export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
     downSpeed = 1
     leftSpeed = 1
     rightSpeed = 1
-
+    type:number
     baseSpeed = 1
     sprite: HTMLImageElement = null
     constructor(
@@ -75,6 +81,10 @@ export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
         this.height = height
         await this.getSprite()
         return
+    }
+    async kill(){
+        staticVariables.gameArea.components = staticVariables.gameArea.components.filter(i=> i.id !== this.id)
+        return 
     }
     async aplyDirections(actions?: GenericCanvasComponent<T>['testWillColidWithRollBack']) {
 
@@ -140,7 +150,7 @@ export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
             return
         }
     }
-    willCollid(): Promise<boolean> {
+    willCollid<E extends IGenericCanvasComponent<I>, I>(): Promise<IGenericCanvasComponent<E>> {
         return new Promise(resolve => {
             const x = this.x
             const y = this.y
@@ -149,9 +159,9 @@ export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
             staticVariables.gameArea.components.forEach((object2, i, k) => {
                 if ((object2.id !== this.id) && this.x < object2.x + object2.width && this.x + this.width > object2.x &&
                     this.y < object2.y + object2.height && this.y + this.height > object2.y) {
-                    resolve(true)
+                    resolve(object2)
                 } else if ((i + 1) === k.length) {
-                    resolve(false)
+                    resolve(null)
                 }
             })
         })

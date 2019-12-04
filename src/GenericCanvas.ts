@@ -43,9 +43,11 @@ export class GenericCanvas<T> implements IGenericCanvas<T>{
         return 
     }
     async draw(): Promise<void> {
+        this.components.forEach(i=>i.preDraw())
         for await (let component of this.components) {
             await component.draw()
         }
+        this.components.forEach(i=>i.postDraw())
         return
     }
     async update(): Promise<void> {
