@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs'
+import { GameAreaEvent } from './globals';
 export interface loading {
     number: number
     of: number
@@ -35,7 +36,7 @@ export interface IGenericKeybordControls<T> {
     startListeningToKeybord(): Promise<void>
     stopListeningToKeybord(): Promise<void>
 }
-export interface IGenericCanvasComponent<T> extends canvasObject {
+export interface IGenericCanvasComponent<T,EVENTTYPES> extends canvasObject {
     context: CanvasRenderingContext2D
     control: IGenericKeybordControls<any> | null
     movingUp: boolean
@@ -62,7 +63,7 @@ export interface IGenericCanvasComponent<T> extends canvasObject {
     preDraw():Promise<void>
     draw(): Promise<void>
     postDraw():Promise<void>
-    willCollid<E extends IGenericCanvasComponent<I>, I>(): Promise<IGenericCanvasComponent<E>|false>
+    willCollid<E extends IGenericCanvasComponent<I,EVENTTYPES>, I>(): Promise<IGenericCanvasComponent<E,EVENTTYPES>|false>
 }
 
 export interface IGenericCanvas<T> {
@@ -77,7 +78,10 @@ export interface IGenericCanvas<T> {
     updateTickSpeed(newTick: number): Promise<void>
     AdaptResolution(resolution: IResolution): Promise<void>
     start(): Promise<void>
+    stop():Promise<void>
     draw(): Promise<void>
     update(): Promise<void>
-    addComponent<E extends IGenericCanvasComponent<I>, I>(component: E): Promise<void>
+    addComponent<E extends IGenericCanvasComponent<I,any>, I>(component: E): Promise<void>
+    emit(events:GameAreaEvent):void
+    on(event:GameAreaEvent,action:()=>{}):void
 }

@@ -1,11 +1,28 @@
 import { IResolution, IGenericCanvas, IGenericCanvasComponent } from "./interfaces";
 import { staticVariables } from "./args";
+import { Subject } from "rxjs";
+import { GameAreaEvent } from "./globals";
 
 
 
 export class GenericCanvas<T> implements IGenericCanvas<T>{
-    components: IGenericCanvasComponent<any>[] = [];
-
+    _Event: Subject<GameAreaEvent> = new Subject()
+    on(event: GameAreaEvent, action: Function) {
+        this._Event.asObservable().subscribe(even => {
+            if (event === even) {
+                action()
+            }
+        })
+    }
+    emit(events: GameAreaEvent): void {
+        this._Event.next(events)
+    }
+    components: IGenericCanvasComponent<any,any>[] = [];
+    async stop() {
+        if (this.intervarIndex) {
+            clearInterval(this.intervarIndex)
+        }
+    }
     constructor(
         public canvas = document.createElement('canvas'),
         public intervarIndex: NodeJS.Timer = null,
@@ -33,29 +50,29 @@ export class GenericCanvas<T> implements IGenericCanvas<T>{
         this.canvas.width = this.resolution.width
         this.canvas.height = this.resolution.height
     }
-    async load(){
+    async load() {
         await this.AdaptResolution(this.resolution)
         document.body.appendChild(this.canvas)
         return
     }
     async start(): Promise<void> {
-        this.intervarIndex = setInterval(()=>{this.update()}, this.tickSpeed)
-        return 
+        this.intervarIndex = setInterval(() => { this.update() }, this.tickSpeed)
+        return
     }
     async draw(): Promise<void> {
-        this.components.forEach(i=>i.preDraw())
+        this.components.forEach(i => i.preDraw())
         for await (let component of this.components) {
             await component.draw()
         }
-        this.components.forEach(i=>i.postDraw())
+        this.components.forEach(i => i.postDraw())
         return
     }
     async update(): Promise<void> {
-        this.context.clearRect(0,0,this.canvas.width,this.canvas.height)
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
         await this.draw()
         return
     }
-    async addComponent(component: IGenericCanvasComponent<any>): Promise<void> {
+    async addComponent(component: IGenericCanvasComponent<any,any>): Promise<void> {
         this.components.push(component)
         return
     }

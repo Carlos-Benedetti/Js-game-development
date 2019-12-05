@@ -5,6 +5,9 @@ export interface bodyBlock {
     y: number
     id: string
 }
-export class SnakeBodyCanvasComponent extends GenericCanvasComponent<any>{
-    type:1
+export class SnakeBodyCanvasComponent extends GenericCanvasComponent<any,any>{
+    public type=1
+    async aplyMoviment(){
+        return
+    }
 }

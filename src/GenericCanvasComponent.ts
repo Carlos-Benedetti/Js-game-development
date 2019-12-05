@@ -5,7 +5,19 @@ import { takeUntil } from "rxjs/operators";
 import { v4 } from 'uuid'
 import { staticVariables } from './args'
 
-export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
+export class GenericCanvasComponent<T,EVENTTYPES> implements IGenericCanvasComponent<T,EVENTTYPES>{
+    _Event: Subject<EVENTTYPES> = new Subject()
+    on(event: EVENTTYPES, action: Function) {
+        this._Event.asObservable().subscribe(even => {
+            if (event === even) {
+                action()
+            }
+        })
+    }
+    emit(events: EVENTTYPES): void {
+        console.log(this.name+" Emitted: "+events)
+        this._Event.next(events)
+    }
     async preDraw(): Promise<void> {
         return 
     }
@@ -86,7 +98,7 @@ export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
         staticVariables.gameArea.components = staticVariables.gameArea.components.filter(i=> i.id !== this.id)
         return 
     }
-    async aplyDirections(actions?: GenericCanvasComponent<T>['testWillColidWithRollBack']) {
+    async aplyDirections(actions?: GenericCanvasComponent<T,EVENTTYPES>['testWillColidWithRollBack']) {
 
         if (this.movingUp) {
             this.y -= this.upSpeed * this.baseSpeed
@@ -150,7 +162,7 @@ export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
             return
         }
     }
-    willCollid<E extends IGenericCanvasComponent<I>, I>(): Promise<IGenericCanvasComponent<E>> {
+    willCollid<E extends IGenericCanvasComponent<I,EVENTTYPES>, I>(): Promise<IGenericCanvasComponent<E,EVENTTYPES>> {
         return new Promise(resolve => {
             const x = this.x
             const y = this.y
@@ -188,6 +200,7 @@ export class GenericCanvasComponent<T> implements IGenericCanvasComponent<T>{
     async draw(): Promise<void> {
         if (this.context) {
             await this.aplyMoviment()
+            await this.getSprite()
             this.context.drawImage(this.sprite, this.x, this.y, this.width, this.height)
             return
         } else {

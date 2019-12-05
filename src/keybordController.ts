@@ -35,7 +35,7 @@ export class GenericKeybordControls<T> implements IGenericKeybordControls<T>{
     };
     async startListeningToKeybord() {
         document.addEventListener('keydown', (e) => { this.keyDownHandler(e, true) }, false);
-        document.addEventListener('keyup', (e) => { this.keyDownHandler(e, false) }, false);
+        document.addEventListener('keyup', (e) => {this.keyDownHandler(e, false) }, false);
     }
     keyMap: IKeyMap;
 
@@ -52,16 +52,21 @@ export class GenericKeybordControls<T> implements IGenericKeybordControls<T>{
 
 
     keyDownHandler(event: any, down: boolean) {
+        console.log(event.keyCode)
         if (event.keyCode == 39) {
+            event.preventDefault();
             down ? this._plusRight.next() : this._minusRight.next()
         }
         else if (event.keyCode == 37) {
+            event.preventDefault();
             down ? this._plusLeft.next() : this._minusLeft.next()
         }
         if (event.keyCode == 40) {
+            event.preventDefault();
             down ? this._plusDown.next() : this._minusDown.next()
         }
         else if (event.keyCode == 38) {
+            event.preventDefault();
             down ? this._plusUp.next() : this._minusUp.next()
         }
     }

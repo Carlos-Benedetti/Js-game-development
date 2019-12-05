@@ -5,8 +5,10 @@ import { Subject } from "rxjs";
 import { loading } from "./interfaces";
 import { square } from "./square";
 import { GenericKeybordControls } from "./keybordController";
-import { SnakeCanvasComponent } from "./snakeCanvasComponent";
+import { SnakeCanvasComponent } from "./snake.CanvasComponent";
 import { SnakeGameArea } from "./Snake.GameArea";
+import { GameAreaEvent, SnakeComponentEvent } from "./globals";
+import { SnakeFruitCanvasComponent } from "./snake.Fruit.CanvasComponent";
 
 export class gameMain {
 
@@ -18,16 +20,24 @@ export class gameMain {
         const snake = new SnakeCanvasComponent()
         snake.load()
 
-        const block = new square()
-        block.x = 100
-        block.y = 100
-        block.height= 100
-        block.load()
+        const fruit = new SnakeFruitCanvasComponent()
+        fruit.getSprite("./assets/red.jpg")
+        fruit.load()
+        console.log(fruit.x)
         
         const keybord = new GenericKeybordControls()
         keybord.load()
         snake.addControl(keybord)
         
         canvas.start();
+
+
+        snake.on(SnakeComponentEvent.GOT_FRUIT, ()=>{
+            new SnakeFruitCanvasComponent().load()
+        })
+        canvas.on(GameAreaEvent.GAME_OVER, ()=>{
+            console.log("over")
+            canvas.stop()
+        })
     }
 }
