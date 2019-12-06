@@ -55,6 +55,8 @@ export interface IGenericCanvasComponent<T,EVENTTYPES> extends canvasObject {
     type:number
     spritePath: string
     sprite: HTMLImageElement
+    unitHeght:number
+    unitWidht:number
     kill():Promise<void>
     addControl<E extends IGenericKeybordControls<I>, I>(control: E): Promise<void>
     aplyMoviment(): Promise<void>
@@ -74,6 +76,8 @@ export interface IGenericCanvas<T> {
     aplyGravity: boolean
     gravity: number
     resolution: IResolution;
+    unitX:number
+    unitY:number
     load():Promise<void>
     updateTickSpeed(newTick: number): Promise<void>
     AdaptResolution(resolution: IResolution): Promise<void>

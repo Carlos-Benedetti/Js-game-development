@@ -72,14 +72,35 @@ export class GenericCanvasComponent<T,EVENTTYPES> implements IGenericCanvasCompo
     type:number
     baseSpeed = 1
     sprite: HTMLImageElement = null
+
+    _unitWidth:number
+    _unitHeight:number
+    
+    public set unitHeght(y : number) {
+        this._unitHeight = (this.aplyResolution({y})).y
+    }
+    public set unitWidht(x : number) {
+        this._unitWidth = (this.aplyResolution({x})).x
+    }
+    
+    public get unitHeght() : number {
+        return this._unitHeight
+    }
+    public get unitWidht() : number {
+        return this._unitWidth
+    }
+    
+    
     constructor(
         public name: string = "Novo Component",
         public id: string = v4(),
-        public width = 10,
-        public height = 10,
+        public width = 1,
+        public height = 1,
         public x = 0,
         public y = 0,
-    ) { }
+    ) {
+       
+    }
     subscribeToEvents(observable: Observable<boolean>, action: (a: any) => any) {
         observable.pipe(takeUntil(this.events)).subscribe(action);
     }
@@ -98,6 +119,17 @@ export class GenericCanvasComponent<T,EVENTTYPES> implements IGenericCanvasCompo
         staticVariables.gameArea.components = staticVariables.gameArea.components.filter(i=> i.id !== this.id)
         return 
     }
+    aplyResolution(xy:{x?:number,y?:number}){
+        if(xy.x){
+            xy.x = staticVariables.gameArea.unitX*this.width
+        }
+        
+        if(xy.y){
+
+            xy.y = staticVariables.gameArea.unitY*this.height
+        }
+        return xy
+    }
     async aplyDirections(actions?: GenericCanvasComponent<T,EVENTTYPES>['testWillColidWithRollBack']) {
 
         if (this.movingUp) {
@@ -112,7 +144,6 @@ export class GenericCanvasComponent<T,EVENTTYPES> implements IGenericCanvasCompo
             this.y += this.downSpeed * this.baseSpeed
             if (actions) {
                 if(await this.willCollid()){
-                    console.log("reverting")
                     this.y -= this.downSpeed * this.baseSpeed
                 }
             }
@@ -201,7 +232,9 @@ export class GenericCanvasComponent<T,EVENTTYPES> implements IGenericCanvasCompo
         if (this.context) {
             await this.aplyMoviment()
             await this.getSprite()
-            this.context.drawImage(this.sprite, this.x, this.y, this.width, this.height)
+            this.unitHeght = this.height 
+            this.unitWidht = this.width 
+            this.context.drawImage(this.sprite, this.x, this.y, this.unitWidht, this.unitHeght)
             return
         } else {
             return

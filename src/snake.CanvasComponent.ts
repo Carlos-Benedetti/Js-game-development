@@ -9,10 +9,10 @@ export interface bodyBlock {
     id: string
     component: SnakeBodyCanvasComponent
 }
-export class SnakeCanvasComponent extends GenericCanvasComponent<any,SnakeComponentEvent>{
+export class SnakeCanvasComponent extends GenericCanvasComponent<any, SnakeComponentEvent>{
     bodyLenght: number = 1
     bodyBlocks: bodyBlock[] = []
-    baseSpeed = this.height
+    baseSpeed = this.aplyResolution({ y: this.height }).y
     spritePath = "./assets/green.png"
     async addBodyBlock(x: number, y: number) {
         const component = new SnakeBodyCanvasComponent()
@@ -30,21 +30,30 @@ export class SnakeCanvasComponent extends GenericCanvasComponent<any,SnakeCompon
         console.log(this.bodyBlocks)
 
     }
-    async aplyDirections(actions?: GenericCanvasComponent<any,any>['testWillColidWithRollBack']) {
+    inPossX(x: number) {
+        const bloacksWidht = staticVariables.gameArea.canvas.width / 10
+        return Math.floor((x) / 10) * bloacksWidht
+    }
+    inPossY(x: number) {
+        const cloackHeight = staticVariables.gameArea.canvas.height / 10
+        return Math.floor((x) / 10) * cloackHeight
+    }
+    async aplyDirections(actions?: GenericCanvasComponent<any, any>['testWillColidWithRollBack']) {
 
         if (this.movingUp) {
             this.y -= this.upSpeed * this.baseSpeed
             if (actions) {
                 if (await this.willCollid()) {
-                    this.y += this.downSpeed * this.baseSpeed
+                    this.y += this.inPossY(this.downSpeed * this.baseSpeed)
                 }
             }
         }
         else if (this.movingDown) {
             this.y += this.downSpeed * this.baseSpeed
+            // debugger
             if (actions) {
                 if (await this.willCollid()) {
-                    this.y -= this.downSpeed * this.baseSpeed
+                    this.y -= this.inPossY(this.downSpeed * this.baseSpeed)
                 }
             }
         }
@@ -82,7 +91,7 @@ export class SnakeCanvasComponent extends GenericCanvasComponent<any,SnakeCompon
                 }
                 if (colision.type === 1)
                     staticVariables.gameArea.emit(GameAreaEvent.GAME_OVER)
-                    this.x = backX;
+                this.x = backX;
                 this.y = backY
 
                 await this.aplyDirections(this.testWillColidWithRollBack.bind(this))
@@ -112,13 +121,18 @@ export class SnakeCanvasComponent extends GenericCanvasComponent<any,SnakeCompon
                         e.y = oldY
                     }
                     else {
-                        e.x = k[i+1].x
-                        e.y = k[i+1].y
+                        e.x = k[i + 1].x
+                        e.y = k[i + 1].y
+                        e.component.x = e.x
                     }
+                    e.component.x = e.x
+                    e.component.y = e.y
                     return e
                 }).reverse()
             }
-            this.context.drawImage(this.sprite, this.x, this.y, this.width, this.height)
+            this.unitHeght = this.height
+            this.unitWidht = this.width
+            this.context.drawImage(this.sprite, this.x, this.y, this.unitWidht, this.unitHeght)
 
             return
         } else {

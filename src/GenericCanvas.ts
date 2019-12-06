@@ -6,6 +6,8 @@ import { GameAreaEvent } from "./globals";
 
 
 export class GenericCanvas<T> implements IGenericCanvas<T>{
+    unitX:number
+    unitY:number
     _Event: Subject<GameAreaEvent> = new Subject()
     on(event: GameAreaEvent, action: Function) {
         this._Event.asObservable().subscribe(even => {
@@ -28,7 +30,7 @@ export class GenericCanvas<T> implements IGenericCanvas<T>{
         public intervarIndex: NodeJS.Timer = null,
         public tickSpeed: number = 10,
         public aplyGravity: boolean = false,
-        public resolution: IResolution = { width: 400, height: 400 },
+        public resolution: IResolution = { width: 100, height: 100 },
         public gravity: number = 9.8,
         public context = canvas.getContext('2d')
     ) { }
@@ -49,6 +51,8 @@ export class GenericCanvas<T> implements IGenericCanvas<T>{
         this.resolution = resolution
         this.canvas.width = this.resolution.width
         this.canvas.height = this.resolution.height
+        this.unitX = this.resolution.width /10
+        this.unitY = this.resolution.height /10
     }
     async load() {
         await this.AdaptResolution(this.resolution)
