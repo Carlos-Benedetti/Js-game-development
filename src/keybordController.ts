@@ -52,7 +52,6 @@ export class GenericKeybordControls<T> implements IGenericKeybordControls<T>{
 
 
     keyDownHandler(event: any, down: boolean) {
-        console.log(event.keyCode)
         if (event.keyCode == 39) {
             event.preventDefault();
             down ? this._plusRight.next() : this._minusRight.next()

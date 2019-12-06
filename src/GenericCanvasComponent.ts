@@ -182,7 +182,7 @@ export class GenericCanvasComponent<T,EVENTTYPES> implements IGenericCanvasCompo
         return new Promise((resolve, reject) => {
             if (!this.sprite) {
                 const sprite = new Image()
-                sprite.src = path ? path : MISSING_TEXTURE.source
+                sprite.src = path ? path: this.spritePath? this.spritePath: MISSING_TEXTURE.source
                 sprite.onload = () => {
                     this.sprite = sprite
                     resolve(this.sprite)

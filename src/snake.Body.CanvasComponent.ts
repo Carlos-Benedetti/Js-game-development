@@ -7,6 +7,7 @@ export interface bodyBlock {
 }
 export class SnakeBodyCanvasComponent extends GenericCanvasComponent<any,any>{
     public type=1
+    spritePath = "./assets/green.png"
     async aplyMoviment(){
         return
     }

@@ -19,7 +19,7 @@ export class SnakeFruitCanvasComponent extends GenericCanvasComponent<any, any>{
     async load(): Promise<void> {
         this.context = staticVariables.gameArea.context;
         staticVariables.gameArea.addComponent(this)
-        await this.getSprite()
+        await this.getSprite(this.spritePath)
 
         const colision = new CollisionDetection()
         const x = Math.floor(Math.random() * staticVariables.gameArea.canvas.width);

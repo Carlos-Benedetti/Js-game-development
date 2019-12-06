@@ -13,6 +13,7 @@ export class SnakeCanvasComponent extends GenericCanvasComponent<any,SnakeCompon
     bodyLenght: number = 1
     bodyBlocks: bodyBlock[] = []
     baseSpeed = this.height
+    spritePath = "./assets/green.png"
     async addBodyBlock(x: number, y: number) {
         const component = new SnakeBodyCanvasComponent()
         component.id = v4()
@@ -26,6 +27,7 @@ export class SnakeCanvasComponent extends GenericCanvasComponent<any,SnakeCompon
             id: component.id,
             component
         })
+        console.log(this.bodyBlocks)
 
     }
     async aplyDirections(actions?: GenericCanvasComponent<any,any>['testWillColidWithRollBack']) {
@@ -104,17 +106,17 @@ export class SnakeCanvasComponent extends GenericCanvasComponent<any,SnakeCompon
 
             await this.aplyMoviment()
             if (oldX != this.x || oldY != this.y) {
-                this.bodyBlocks.reverse().map((e, i, k) => {
+                this.bodyBlocks = this.bodyBlocks.reverse().map((e, i, k) => {
                     if ((i + 1) === k.length) {
                         e.x = oldX
                         e.y = oldY
                     }
                     else {
-                        e.x = k[i].x
-                        e.y = k[i].y
+                        e.x = k[i+1].x
+                        e.y = k[i+1].y
                     }
                     return e
-                })
+                }).reverse()
             }
             this.context.drawImage(this.sprite, this.x, this.y, this.width, this.height)
 

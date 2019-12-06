@@ -31,7 +31,9 @@ export class gameMain {
         
         canvas.start();
 
-
+        setInterval(()=>{
+            console.log(canvas.components)
+        },200)
         snake.on(SnakeComponentEvent.GOT_FRUIT, ()=>{
             new SnakeFruitCanvasComponent().load()
         })
