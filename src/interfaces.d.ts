@@ -65,7 +65,7 @@ export interface IGenericCanvasComponent<T,EVENTTYPES> extends canvasObject {
     preDraw():Promise<void>
     draw(): Promise<void>
     postDraw():Promise<void>
-    willCollid<E extends IGenericCanvasComponent<I,EVENTTYPES>, I>(): Promise<IGenericCanvasComponent<E,EVENTTYPES>|false>
+    willCollid<E extends IGenericCanvasComponent<I,EVENTTYPES>, I>(): Promise<IGenericCanvasComponent<E,EVENTTYPES>|{type:string}|false>
 }
 
 export interface IGenericCanvas<T> {

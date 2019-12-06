@@ -9,6 +9,7 @@ import { SnakeCanvasComponent } from "./snake.CanvasComponent";
 import { SnakeGameArea } from "./Snake.GameArea";
 import { GameAreaEvent, SnakeComponentEvent } from "./globals";
 import { SnakeFruitCanvasComponent } from "./snake.Fruit.CanvasComponent";
+import { staticVariables } from "./args";
 
 export class gameMain {
 
@@ -19,7 +20,7 @@ export class gameMain {
 
         const snake = new SnakeCanvasComponent()
         snake.load()
-
+        staticVariables.player = snake
         const fruit = new SnakeFruitCanvasComponent()
         fruit.getSprite("./assets/red.jpg")
         fruit.load()

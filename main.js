@@ -6,9 +6,9 @@ let mainWindow
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    // fullscreen:true,
+    width: 1024,
+    height: 780,
+    fullscreen:false,
     autoHideMenuBar:true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
@@ -19,7 +19,7 @@ function createWindow () {
   mainWindow.loadFile('index.html')
   mainWindow.removeMenu()
   
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   
   mainWindow.on('closed', function () {

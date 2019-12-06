@@ -193,12 +193,16 @@ export class GenericCanvasComponent<T,EVENTTYPES> implements IGenericCanvasCompo
             return
         }
     }
-    willCollid<E extends IGenericCanvasComponent<I,EVENTTYPES>, I>(): Promise<IGenericCanvasComponent<E,EVENTTYPES>> {
+    willCollid<E extends IGenericCanvasComponent<I,EVENTTYPES>, I>(): Promise<IGenericCanvasComponent<E,EVENTTYPES>|{type:string}> {
         return new Promise(resolve => {
             const x = this.x
             const y = this.y
             const width = this.width
             const height = this.height
+            const canvas = staticVariables.gameArea.canvas
+            if(x < 0 || y < 0 || x+width > canvas.width || y+height > canvas.height ){
+                resolve({type:"WALL"})
+            }
             staticVariables.gameArea.components.forEach((object2, i, k) => {
                 if ((object2.id !== this.id) && this.x < object2.x + object2.width && this.x + this.width > object2.x &&
                     this.y < object2.y + object2.height && this.y + this.height > object2.y) {
@@ -207,6 +211,7 @@ export class GenericCanvasComponent<T,EVENTTYPES> implements IGenericCanvasCompo
                     resolve(null)
                 }
             })
+
         })
     }
     getSprite(path?: string): Promise<HTMLImageElement> {

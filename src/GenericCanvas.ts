@@ -51,8 +51,8 @@ export class GenericCanvas<T> implements IGenericCanvas<T>{
         this.resolution = resolution
         this.canvas.width = this.resolution.width
         this.canvas.height = this.resolution.height
-        this.unitX = this.resolution.width /10
-        this.unitY = this.resolution.height /10
+        this.unitX = this.resolution.width /20
+        this.unitY = this.resolution.height /20
     }
     async load() {
         await this.AdaptResolution(this.resolution)
@@ -69,6 +69,7 @@ export class GenericCanvas<T> implements IGenericCanvas<T>{
             await component.draw()
         }
         this.components.forEach(i => i.postDraw())
+        this.emit(GameAreaEvent.DID_DRAW)
         return
     }
     async update(): Promise<void> {

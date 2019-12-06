@@ -44,16 +44,15 @@ export class SnakeCanvasComponent extends GenericCanvasComponent<any, SnakeCompo
             this.y -= this.upSpeed * this.baseSpeed
             if (actions) {
                 if (await this.willCollid()) {
-                    this.y += this.inPossY(this.downSpeed * this.baseSpeed)
+                    this.y += this.upSpeed * this.baseSpeed
                 }
             }
         }
         else if (this.movingDown) {
             this.y += this.downSpeed * this.baseSpeed
-            // debugger
             if (actions) {
                 if (await this.willCollid()) {
-                    this.y -= this.inPossY(this.downSpeed * this.baseSpeed)
+                    this.y -= this.downSpeed * this.baseSpeed
                 }
             }
         }
@@ -81,24 +80,30 @@ export class SnakeCanvasComponent extends GenericCanvasComponent<any, SnakeCompo
         const backY = this.y;
 
         this.aplyDirections()
-        const colision = await this.willCollid()
+        const colision: any = await this.willCollid()
         if (colision) {
-            if (colision) {
+            if (colision.id) {
                 if (colision.type === 2) {
                     this.emit(SnakeComponentEvent.GOT_FRUIT)
                     await this.addBodyBlock(backX, backY)
                     colision.kill()
                 }
-                if (colision.type === 1)
+                if (colision.type === 1) {
                     staticVariables.gameArea.emit(GameAreaEvent.GAME_OVER)
+                    this.x = backX;
+                    this.y = backY
+
+                    await this.aplyDirections(this.testWillColidWithRollBack.bind(this))
+                }
+                return
+            } else if (colision.type) {
                 this.x = backX;
                 this.y = backY
-
                 await this.aplyDirections(this.testWillColidWithRollBack.bind(this))
-                return
             } else {
                 return
             }
+
         }
     }
     async preDraw() {
