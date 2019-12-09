@@ -10,6 +10,8 @@ import { SnakeGameArea } from "./Snake.GameArea";
 import { GameAreaEvent, SnakeComponentEvent } from "./globals";
 import { SnakeFruitCanvasComponent } from "./snake.Fruit.CanvasComponent";
 import { staticVariables } from "./args";
+import { DumbIaController } from "./DumbIaController";
+import { SmartDumbIaController } from "./SmartDumbIaController";
 
 export class gameMain {
 
@@ -21,21 +23,26 @@ export class gameMain {
         const snake = new SnakeCanvasComponent()
         snake.load()
         staticVariables.player = snake
+
+
         const fruit = new SnakeFruitCanvasComponent()
         fruit.getSprite("./assets/red.jpg")
         fruit.load()
-        console.log(fruit.x)
-        
-        const keybord = new GenericKeybordControls()
+        staticVariables.fruit = fruit
+
+
+        const keybord = new SmartDumbIaController()
         keybord.load()
         snake.addControl(keybord)
-        
+
         canvas.start();
 
-        snake.on(SnakeComponentEvent.GOT_FRUIT, ()=>{
-            new SnakeFruitCanvasComponent().load()
+        snake.on(SnakeComponentEvent.GOT_FRUIT, () => {
+            const fruit = new SnakeFruitCanvasComponent()
+            fruit.load()
+            staticVariables.fruit = fruit
         })
-        canvas.on(GameAreaEvent.GAME_OVER, ()=>{
+        canvas.on(GameAreaEvent.GAME_OVER, () => {
             console.log("over")
             canvas.stop()
         })

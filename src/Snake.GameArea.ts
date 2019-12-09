@@ -5,7 +5,7 @@ export class SnakeGameArea extends GenericCanvas<any>{
     name = "gameArea"
     constructor() {
         super();
-        this.tickSpeed = 100
+        this.tickSpeed = 10
 
         staticVariables.gameArea = this
     }

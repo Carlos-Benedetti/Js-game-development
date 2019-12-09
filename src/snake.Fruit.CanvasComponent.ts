@@ -35,7 +35,6 @@ export class SnakeFruitCanvasComponent extends GenericCanvasComponent<any, any>{
         this.x = x;
         this.y = y
         while (!(await colision.testComponent(this))) {
-            console.log("on loop")
             const x = Math.floor(Math.random() * staticVariables.gameArea.canvas.width);
             const y = Math.floor(Math.random() * staticVariables.gameArea.canvas.height);
             this.x = x;
