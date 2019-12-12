@@ -2,6 +2,7 @@ import { GenericCanvasComponent } from "../VaregueJsEngine/GenericCanvasComponen
 import { SpaceShipComponentEvent } from "./globals";
 import { SpaceShipController } from "./spaceShipController";
 import { SpaceShipFireCanvasComponent } from "./SpaceShip.fire.canvasComponent";
+import { TriangleVector } from "./TriangleVector";
 
 export class SpaceShipCanvasComponent extends GenericCanvasComponent<any, SpaceShipComponentEvent>{
     spritePath = './assets/asteroids/spaceShip.png'
@@ -22,9 +23,11 @@ export class SpaceShipCanvasComponent extends GenericCanvasComponent<any, SpaceS
             this.unitHeght = this.height
             this.unitWidht = this.width
             this.context.save();
-            this.context.translate(this.x, this.y);
+            const frentx = this.x + (this.unitWidht/2)
+            const frenty = this.y + (this.unitHeght/2)
+            this.context.translate(frentx, frenty);
             this.context.rotate(this.angle * Math.PI / 180);
-            this.context.translate(-this.x, -this.y);
+            this.context.translate(-frentx, -frenty);
             this.context.drawImage(this.sprite, this.x, this.y, this.unitWidht, this.unitHeght)
 
             this.context.restore()
@@ -71,6 +74,7 @@ export class SpaceShipCanvasComponent extends GenericCanvasComponent<any, SpaceS
         if (this.rotatingLeft) {
             this.angle -= 2
         }
+        // new TriangleVector().draw(this.context,this.x,this.y,this.unitWidht,this.unitHeght,this.angle)
         if (this.shoot) {
             this.shoot = false
             const incrementY = Number((this.baseSpeed*3) * Math.cos(this.angle * Math.PI / 180))

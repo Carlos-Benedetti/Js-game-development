@@ -1,5 +1,5 @@
 import { IResolution, IGenericCanvas, IGenericCanvasComponent } from "./interfaces";
-import { staticVariables } from "./args";
+import { staticVariables } from "../snake/args";
 import { Subject } from "rxjs";
 import { GameAreaEvent } from "./globals";
 

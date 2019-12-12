@@ -1,7 +1,7 @@
 import { GameArea } from "./GameArea";
 import { GenericCanvasComponent } from "./GenericCanvasComponent";
 import { promises } from "dns";
-import { staticVariables } from "./args";
+import { staticVariables } from "../snake/args";
 
 export class CollisionDetection {
     testComponent(component: GenericCanvasComponent<any,any>) {

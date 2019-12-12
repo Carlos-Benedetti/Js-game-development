@@ -9,7 +9,7 @@ import { SnakeCanvasComponent } from "./snake.CanvasComponent";
 import { SnakeGameArea } from "./Snake.GameArea";
 import { GameAreaEvent, SnakeComponentEvent } from "../VaregueJsEngine/globals";
 import { SnakeFruitCanvasComponent } from "./snake.Fruit.CanvasComponent";
-import { staticVariables } from "../VaregueJsEngine/args";
+import { staticVariables } from "./args";
 import { DumbIaController } from "./DumbIaController";
 import { SmartDumbIaController } from "./SmartDumbIaController";
 
@@ -21,30 +21,30 @@ export class gameMain {
         await canvas.load(staticVariables)
 
         const snake = new SnakeCanvasComponent()
-        snake.load(canvas)
+        await snake.load(canvas)
         staticVariables.player = snake
 
 
-        const fruit = new SnakeFruitCanvasComponent()
-        fruit.getSprite("./assets/red.jpg")
-        fruit.load()
-        staticVariables.fruit = fruit
+        // const fruit = new SnakeFruitCanvasComponent()
+        // fruit.getSprite("./assets/red.jpg")
+        // fruit.load(canvas)
+        // staticVariables.fruit = fruit
 
 
-        const keybord = new SmartDumbIaController()
-        keybord.load()
-        snake.addControl(keybord)
+        // const keybord = new SmartDumbIaController()
+        // keybord.load()
+        // snake.addControl(keybord)
 
         canvas.start();
 
-        snake.on(SnakeComponentEvent.GOT_FRUIT, () => {
-            const fruit = new SnakeFruitCanvasComponent()
-            fruit.load()
-            staticVariables.fruit = fruit
-        })
-        canvas.on(GameAreaEvent.GAME_OVER, () => {
-            console.log("over")
-            canvas.stop()
-        })
+        // snake.on(SnakeComponentEvent.GOT_FRUIT, () => {
+        //     const fruit = new SnakeFruitCanvasComponent()
+        //     fruit.load()
+        //     staticVariables.fruit = fruit
+        // })
+        // canvas.on(GameAreaEvent.GAME_OVER, () => {
+        //     console.log("over")
+        //     canvas.stop()
+        // })
     }
 }

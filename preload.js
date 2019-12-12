@@ -12,7 +12,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   main()
 })
-var GameArea = require("./lib/asteroids/game").gameMain;
+var GameArea = require("./lib/snake/game").gameMain;
 
 function main(){
     const canvas = new GameArea()

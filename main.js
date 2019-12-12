@@ -19,7 +19,7 @@ function createWindow () {
   mainWindow.loadFile('index.html')
   mainWindow.removeMenu()
   
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   
   mainWindow.on('closed', function () {

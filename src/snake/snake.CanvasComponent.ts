@@ -1,6 +1,6 @@
 import { GenericCanvasComponent } from "../VaregueJsEngine/GenericCanvasComponent";
 import { v4 } from 'uuid'
-import { staticVariables } from "../VaregueJsEngine/args";
+import { staticVariables } from "./args";
 import { SnakeBodyCanvasComponent } from "./snake.Body.CanvasComponent";
 import { GameAreaEvent, SnakeComponentEvent } from "../VaregueJsEngine/globals";
 export interface bodyBlock {

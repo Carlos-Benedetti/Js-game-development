@@ -1,5 +1,5 @@
 import { GenericCanvas } from "./GenericCanvas";
-import { staticVariables } from "./args";
+import { staticVariables } from "../snake/args";
 
 export class GameArea extends GenericCanvas<any>{
     name = "gameArea"
