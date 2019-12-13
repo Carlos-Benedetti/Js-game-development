@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs'
 import { GameAreaEvent } from './globals';
+import { GenericCanvas } from './GenericCanvas';
 export interface loading {
     number: number
     of: number
@@ -32,8 +33,8 @@ export interface IGenericKeybordControls<T> {
     minusRight: Observable<boolean>
 
     keyMap: IKeyMap
-    load():Promise<void>
-    startListeningToKeybord(): Promise<void>
+    load(canvas:GenericCanvas<any>):Promise<void>
+    startListeningToKeybord(canvas:GenericCanvas<any>): Promise<void>
     stopListeningToKeybord(): Promise<void>
 }
 export interface IGenericCanvasComponent<T,EVENTTYPES> extends canvasObject {

@@ -1,9 +1,10 @@
 import { IGenericKeybordControls, IKeyMap } from "./interfaces";
 import { Observable, Subject } from "rxjs";
+import { GenericCanvas } from "./GenericCanvas";
 
 export class GenericKeybordControls<T> implements IGenericKeybordControls<T>{
-    async load(){
-        await this.startListeningToKeybord()
+    async load(canvas:GenericCanvas<any>){
+        await this.startListeningToKeybord(canvas)
         return 
     }
     stopListeningToKeybord(): Promise<void> {
@@ -33,9 +34,9 @@ export class GenericKeybordControls<T> implements IGenericKeybordControls<T>{
     get minusRight(): Observable<boolean> {
         return this._minusRight.asObservable()
     };
-    async startListeningToKeybord() {
-        document.addEventListener('keydown', (e) => { this.keyDownHandler(e, true) }, false);
-        document.addEventListener('keyup', (e) => {this.keyDownHandler(e, false) }, false);
+    async startListeningToKeybord(canvas:GenericCanvas<any>) {
+        canvas.canvas.addEventListener('keydown', (e) => { this.keyDownHandler(e, true) }, false);
+        canvas.canvas.addEventListener('keyup', (e) => {this.keyDownHandler(e, false) }, false);
     }
     keyMap: IKeyMap;
 

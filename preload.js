@@ -12,11 +12,11 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   main()
 })
-var GameArea = require("./lib/asteroids/game").gameMain;
+var asteroids = require("./lib/asteroids/game").gameMain;
+var snake = require("./lib/snake/game").gameMain;
 
 function main(){
-    const canvas = new GameArea()
-    
-    canvas.start()
+  new snake().start()
+  new asteroids().start()
 }
 

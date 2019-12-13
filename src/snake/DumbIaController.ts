@@ -1,5 +1,5 @@
 import { GenericKeybordControls } from "../VaregueJsEngine/keybordController";
-import { staticVariables } from "../VaregueJsEngine/args";
+import { staticVariables } from "./args";
 import { GameAreaEvent } from "../VaregueJsEngine/globals";
 
 export class DumbIaController extends GenericKeybordControls<any>{

@@ -23,7 +23,7 @@ export class gameMain {
 
 
         const keybord = new SpaceShipController()
-        keybord.load()
+        keybord.load(canvas)
         spaceShip.addControl(keybord)
 
         canvas.start();

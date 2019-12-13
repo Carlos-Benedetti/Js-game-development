@@ -34,7 +34,7 @@ export class GenericCanvas<T> implements IGenericCanvas<T>{
         public resolution: IResolution = { width: 800, height: 600 },
         public gravity: number = 9.8,
         public context = canvas.getContext('2d')
-    ) { }
+    ) {canvas.tabIndex = 1 }
 
     async updateTickSpeed(newTick: number): Promise<void> {
         this.tickSpeed = newTick

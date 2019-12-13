@@ -10,7 +10,7 @@ export class CollisionDetection {
             const y = component.y
             const unitWidht = component.unitWidht
             const unitHeght = component.unitHeght
-            staticVariables.gameArea.components.forEach((object2, i, k) => {
+            component.staticVariables.gameArea.components.forEach((object2, i, k) => {
 
                 if ((object2.id !== component.id) || component.x < object2.x + object2.unitWidht && component.x + component.unitWidht > object2.x &&
                     component.y < object2.y + object2.unitHeght && component.y + component.unitHeght > object2.y) {

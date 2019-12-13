@@ -1,6 +1,5 @@
 import { GenericCanvasComponent } from "../VaregueJsEngine/GenericCanvasComponent";
 import { v4 } from 'uuid'
-import { staticVariables } from "../VaregueJsEngine/args";
 import { SnakeBodyCanvasComponent } from "./snake.Body.CanvasComponent";
 import { GameAreaEvent, SnakeComponentEvent } from "../VaregueJsEngine/globals";
 export interface bodyBlock {
@@ -12,7 +11,7 @@ export interface bodyBlock {
 export class SnakeCanvasComponent extends GenericCanvasComponent<any, SnakeComponentEvent>{
     bodyLenght: number = 1
     bodyBlocks: bodyBlock[] = []
-    baseSpeed = this.aplyResolution({ y: this.height }).y
+    
     spritePath = "./assets/green.png"
     async addBodyBlock(x: number, y: number) {
         const component = new SnakeBodyCanvasComponent()
@@ -31,11 +30,11 @@ export class SnakeCanvasComponent extends GenericCanvasComponent<any, SnakeCompo
 
     }
     inPossX(x: number) {
-        const bloacksWidht = staticVariables.gameArea.canvas.width / 10
+        const bloacksWidht = this.staticVariables.gameArea.canvas.width / 10
         return Math.floor((x) / 10) * bloacksWidht
     }
     inPossY(x: number) {
-        const cloackHeight = staticVariables.gameArea.canvas.height / 10
+        const cloackHeight = this.staticVariables.gameArea.canvas.height / 10
         return Math.floor((x) / 10) * cloackHeight
     }
     async aplyDirections(actions?: GenericCanvasComponent<any, any>['testWillColidWithRollBack']) {
@@ -89,7 +88,7 @@ export class SnakeCanvasComponent extends GenericCanvasComponent<any, SnakeCompo
                     colision.kill()
                 }
                 if (colision.type === 1) {
-                    staticVariables.gameArea.emit(GameAreaEvent.GAME_OVER)
+                    this.staticVariables.gameArea.emit(GameAreaEvent.GAME_OVER)
                     this.x = backX;
                     this.y = backY
 
@@ -115,6 +114,7 @@ export class SnakeCanvasComponent extends GenericCanvasComponent<any, SnakeCompo
     }
     async draw(): Promise<void> {
         if (this.context) {
+            this.baseSpeed = this.aplyResolution({ y: this.height }).y
             const oldX = this.x
             const oldY = this.y
 

@@ -1,6 +1,6 @@
 import { GenericCanvasComponent } from "../VaregueJsEngine/GenericCanvasComponent";
-import { staticVariables } from "../VaregueJsEngine/args";
-import { CollisionDetection } from "../VaregueJsEngine/CollisionDetection";
+import { staticVariables } from "./args";
+import { SnakeColsionDetection } from "./snake.ColisionDetection";
 export interface bodyBlock {
     x: number
     y: number
@@ -23,12 +23,13 @@ export class SnakeFruitCanvasComponent extends GenericCanvasComponent<any, any>{
         const cloackHeight = staticVariables.gameArea.canvas.height /10
         return Math.floor((x)/10)*cloackHeight
     }
-    async load(): Promise<void> {
+    async load(gameArea:any): Promise<void> {
+        this.staticVariables = gameArea.gameContext
         this.context = staticVariables.gameArea.context;
         staticVariables.gameArea.addComponent(this)
         await this.getSprite(this.spritePath)
 
-        const colision = new CollisionDetection()
+        const colision = new SnakeColsionDetection()
         const x = this.inPossX(Math.floor(Math.random() * staticVariables.gameArea.canvas.width));
         const y = this.inPossY(Math.floor(Math.random() * staticVariables.gameArea.canvas.height))
         this.x = x;
